@@ -58,7 +58,7 @@ int main( ) {
     // TODO: usar arrays dinamicos en lugar de estaticos si hay tiempo 
     struct Person persons[PERSONS_LENGTH]; 
     int i,j, n = 0;
-	char* arr[5];
+	const char* arr[5];
 	char control;
 	
     FILE* stream = fopen("datos.txt", "r");
@@ -70,59 +70,89 @@ int main( ) {
         free(tmp);
         i++;
     }
+    fclose(stream);
     
-    printf("a. Listar datos ordenados por apellido\r\n");
-	printf("b. Listar datos ordenados por edad\r\n");
-	printf("c. Escribir datos ordenados en un archivo nuevo\r\n");
-	printf("d. Hacer una busqueda binaria\r\n\n");
+    LABEL:
+	    printf("a. Listar datos ordenados por apellido\r\n");
+		printf("b. Listar datos ordenados por edad\r\n");
+		printf("c. Escribir datos ordenados en un archivo nuevo\r\n");
+		printf("d. Hacer una busqueda binaria\r\n\n");
+		
+		printf(">>Digite una opcion:  \r\n");
+		
+		scanf("%s", &control);
 	
-	printf(">>Digite una opcion:  \r\n");
+	printf("\n");
 	
-//	scanf("%s", &control);
-	
-//	switch (control){
-//		case 'a':
-//			printf("Los datos se organizaran por apellido");
-//			for (i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++) {
-//				arr[i] = persons[i].last;
-//		    }
-//				int n = sizeof(arr) / sizeof(arr[0]);
-//    			sort(arr, n+1);
-//			break;
-//		case 'b':
-//			printf("Los datos se organizaran por edad");
-//			for (i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++) {
-//				arr[i] = persons[i].age;
-//    		}
-//				n = sizeof(arr) / sizeof(arr[0]);
-//    			sort(arr, n+1);
-//			break;
-//		case 'c':
-//			break;
-//		case 'd':
-//			break;
-//		default:
-//			printf("El comando ingresado no es valido");
-//			break;
-//	}
-    
-    for (i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++) {
-			arr[i] = persons[i].age;
-	  }
-	n = sizeof(arr) / sizeof(arr[0]);
-    sort(arr, n+1);
-		    
-    for(i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++){
-    	for (j = 0; j < n+1; j++){
-    		if(arr[i] == persons[j].age){
-		    	  printf( "name: %s\n", persons[j].name);
-		          printf( "lastname: %s\n", persons[j].last);
-		          printf( "age: %s\n", persons[j].age);
-		          printf( "email: %s\n", persons[j].email);
-		          printf( "----------------------------------\r\n");
+	if(control == 'a'){
+		printf("Los datos se organizaran por apellido");
+			for (i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++) {
+				arr[i] = persons[i].last;
+		    }
+				n = sizeof(arr) / sizeof(arr[0]);
+    			sort(arr, n+1);
+    			
+    		for(i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++){
+		    	for (j = 0; j < n+1; j++){
+		    		if(arr[i] == persons[j].last){
+				    	  printf( "name: %s\n", persons[j].name);
+				          printf( "lastname: %s\n", persons[j].last);
+				          printf( "age: %s\n", persons[j].age);
+				          printf( "email: %s\n", persons[j].email);
+				          printf( "----------------------------------\r\n");
+						}
 				}
-		}
+		    }
+		goto LABEL;    
 	}
-
+	if(control == 'b'){
+		printf("Los datos se organizaran por edad");
+	    for (i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++) {
+					arr[i] = persons[i].age;
+			  	}
+			n = sizeof(arr) / sizeof(arr[0]);
+		    sort(arr, n+1);
+				    
+		    for(i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++){
+		    	for (j = 0; j < n+1; j++){
+		    		if(arr[i] == persons[j].age){
+				    	  printf( "name: %s\n", persons[j].name);
+				          printf( "lastname: %s\n", persons[j].last);
+				          printf( "age: %s\n", persons[j].age);
+				          printf( "email: %s\n", persons[j].email);
+				          printf( "----------------------------------\r\n");
+						}
+				}
+			}
+		goto LABEL;
+	}
+	if (control == 'c'){
+		FILE* stream = fopen ("datos_organizados.txt", "Wt");
+		if(stream != NULL){
+			for (i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++) {
+				arr[i] = persons[i].last;
+		    }
+		n = sizeof(arr) / sizeof(arr[0]);
+    	sort(arr, n+1);
+    			
+    	for(i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++){
+		   	for (j = 0; j < n+1; j++){
+		   		if(arr[i] == persons[j].last){
+		    	  fprintf(stream, "%s,", persons[j].name);
+		          fprintf(stream, "%s,", persons[j].last);
+		          fprintf(stream, "%s,", persons[j].age);
+		          fprintf(stream, persons[j].email);
+				}
+			}
+		  }
+		}
+		else{
+			printf("Error al abrir el archivo\r\n");
+		}
+		fclose(stream);
+		goto LABEL;   
+	}
+	
+   
    return 0;
 }
