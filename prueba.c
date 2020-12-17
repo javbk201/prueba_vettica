@@ -127,32 +127,47 @@ int main( ) {
 		goto LABEL;
 	}
 	if (control == 'c'){
-		FILE* stream = fopen ("datos_organizados.txt", "Wt");
-		if(stream != NULL){
+		FILE *file; 
+		file = fopen ("datos_organizados.txt", "w+");
+		if(file != NULL){
 			for (i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++) {
 				arr[i] = persons[i].last;
 		    }
 		n = sizeof(arr) / sizeof(arr[0]);
-    	sort(arr, n+1);
-    			
+    	sort(arr, n+1);	
     	for(i = 0; i < PERSONS_LENGTH && persons[i].name[0] != '\0'; i++){
 		   	for (j = 0; j < n+1; j++){
+		   		char* temp;
 		   		if(arr[i] == persons[j].last){
-		    	  fprintf(stream, "%s,", persons[j].name);
-		          fprintf(stream, "%s,", persons[j].last);
-		          fprintf(stream, "%s,", persons[j].age);
-		          fprintf(stream, persons[j].email);
+		   			temp = persons[j].name;
+		    	  	fprintf(file, "%s,", temp);
+		    	  	temp = persons[j].last;
+		          	fprintf(file, "%s,", temp);
+		          	temp = persons[j].age;
+		          	fprintf(file, "%s,", temp);
+		          	temp = persons[j].email;
+		          	fprintf(file, temp);
+		          	fprintf(file, "\r");
+
 				}
 			}
 		  }
+		  printf("Archivo guradado satisfactoriamente\r\n\n");
 		}
 		else{
+			perror("Error: ");
 			printf("Error al abrir el archivo\r\n");
 		}
-		fclose(stream);
+		fclose(file);
 		goto LABEL;   
 	}
-	
+	if(control == 'd'){
+		char user;
+		printf("Ingrese el nombre del usuario: ");
+		scanf("%s", &user;)
+		
+	}
+
    
    return 0;
 }
